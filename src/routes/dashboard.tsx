@@ -261,12 +261,20 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* three mini panels stacked tight */}
+          {/* creator + mini panels stacked tight */}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <MiniList title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
-            <MiniList title="Sources" rows={sources.map((s) => [s.s, s.p] as const)} />
-            <MiniList title="Devices" rows={devices.map((d) => [d.d, d.p] as const)} />
+            <div className="surface-glass rounded-2xl p-5 sm:col-span-2 lg:col-span-1">
+              <LinkCreator compact />
+            </div>
+            <MiniList icon={Globe} title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
+            <MiniList icon={Radar} title="Sources" rows={sources.map((s) => [s.s, s.p] as const)} />
+            <MiniList
+              icon={Smartphone}
+              title="Devices"
+              rows={devices.map((d) => [d.d, d.p] as const)}
+            />
           </div>
+
         </div>
 
         {/* Dense link table */}
