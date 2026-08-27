@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 
 const nav = [
   { to: "/features", label: "Features" },
-  { to: "/pricing", label: "Pricing" },
+  { to: "/traffic", label: "Traffic" },
   { to: "/dashboard", label: "Dashboard" },
 ] as const;
+
 
 export function Header() {
   const [open, setOpen] = useState(false);
