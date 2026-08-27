@@ -180,16 +180,9 @@ function Dashboard() {
                   </button>
                 ))}
               </div>
-              <div className="mt-3 flex gap-2">
-                <Input placeholder="Paste URL…" className="h-9 bg-background/60 text-sm" />
-                <Button
-                  variant="hero"
-                  className="h-9 px-4"
-                  onClick={() => toast.success("Short link created")}
-                >
-                  Create
-                </Button>
-              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {rate === "5" ? "Steady drip · human-paced" : "Launch burst · 2x pace"}
+              </p>
             </div>
           </div>
         </section>
@@ -198,7 +191,7 @@ function Dashboard() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {kpis.map((k) => (
             <div key={k.label} className="surface-glass lift flex items-center gap-3 rounded-xl p-4">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+              <span className="icon-tile size-9 shrink-0">
                 <k.icon className="size-4" />
               </span>
               <div className="min-w-0">
@@ -212,6 +205,7 @@ function Dashboard() {
             </div>
           ))}
         </div>
+
 
         {/* Main grid — everything in little space */}
         <div className="mt-3 grid items-start gap-3 lg:grid-cols-[1.5fr_1fr]">
