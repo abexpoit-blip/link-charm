@@ -71,8 +71,8 @@ const faqs = [
     a: "Yes. There is no paid tier, no card and no trial. Every account gets unlimited short links plus 500,000 routed clicks per week.",
   },
   {
-    q: "What is the difference between 5% and 10% routing?",
-    a: "5% is a steady, human-paced drip that keeps traffic looking organic. 10% is launch mode — the same network, twice the pace, for spikes and product launches.",
+    q: "What is the difference between Steady and Launch mode?",
+    a: "Steady mode is a human-paced drip that keeps traffic looking organic. Launch mode uses the same network at roughly double the pace, for spikes and product launches.",
   },
   {
     q: "When does the weekly quota reset?",

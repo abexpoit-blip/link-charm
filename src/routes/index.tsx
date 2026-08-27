@@ -144,7 +144,7 @@ function Home() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-6xl px-5 pt-32 pb-24">
+      <section className="mx-auto max-w-6xl px-5 pt-12 pb-24">
         <h2 className="max-w-xl text-3xl font-bold sm:text-4xl">
           Everything a link needs after the click
         </h2>
@@ -172,7 +172,7 @@ function Home() {
           <div className="relative">
             <h2 className="text-3xl font-bold sm:text-4xl">Start snipping in under a minute</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              Unlimited links, 5% or 10% traffic routing, 500,000 clicks weekly — all free.
+              Unlimited links, steady or launch traffic routing, 500,000 clicks weekly — all free.
             </p>
             <div className="mt-8 flex justify-center">
               <Button size="xl" variant="hero" asChild>
