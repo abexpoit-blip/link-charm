@@ -211,6 +211,7 @@ function Dashboard() {
 
         {/* Main grid — everything in little space */}
         <div className="mt-3 grid items-start gap-3 lg:grid-cols-[1.5fr_1fr]">
+          <div className="grid gap-3">
           <div className="surface-glass rounded-2xl p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
@@ -263,6 +264,56 @@ function Dashboard() {
             </div>
           </div>
 
+          {/* Dense link table */}
+          <div className="surface-glass overflow-x-auto rounded-2xl p-5">
+            <h2 className="text-sm font-semibold">Links · clicks & users</h2>
+            <table className="mt-4 w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-muted-foreground">
+                  <th className="pb-2 font-normal">Short link</th>
+                  <th className="pb-2 font-normal">Destination</th>
+                  <th className="pb-2 text-right font-normal">Clicks</th>
+                  <th className="pb-2 text-right font-normal">Users</th>
+                  <th className="pb-2 pl-6 font-normal">Share</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {links.map((l) => (
+                  <tr key={l.slug}>
+                    <td className="py-2.5">
+                      <div className="flex items-center gap-2">
+                        <code className="font-mono text-xs text-primary">{l.slug}</code>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard?.writeText(`https://${l.slug}`);
+                            toast.success("Copied");
+                          }}
+                          aria-label={`Copy ${l.slug}`}
+                          className="text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <Copy className="size-3" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="max-w-[180px] truncate py-2.5 text-xs text-muted-foreground">
+                      {l.dest}
+                    </td>
+                    <td className="py-2.5 text-right font-display text-xs font-semibold">
+                      {l.clicks.toLocaleString()}
+                    </td>
+                    <td className="py-2.5 text-right text-xs text-muted-foreground">
+                      {l.users.toLocaleString()}
+                    </td>
+                    <td className="w-32 py-2.5 pl-6">
+                      <Progress value={l.ctr} className="h-1" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          </div>
+
           {/* creator + mini panels stacked tight */}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             <div className="surface-glass rounded-2xl p-5 sm:col-span-2 lg:col-span-1">
@@ -279,54 +330,6 @@ function Dashboard() {
 
         </div>
 
-        {/* Dense link table */}
-        <div className="surface-glass mt-3 overflow-x-auto rounded-2xl p-5">
-          <h2 className="text-sm font-semibold">Links · clicks & users</h2>
-          <table className="mt-4 w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs text-muted-foreground">
-                <th className="pb-2 font-normal">Short link</th>
-                <th className="pb-2 font-normal">Destination</th>
-                <th className="pb-2 text-right font-normal">Clicks</th>
-                <th className="pb-2 text-right font-normal">Users</th>
-                <th className="pb-2 pl-6 font-normal">Share</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {links.map((l) => (
-                <tr key={l.slug}>
-                  <td className="py-2.5">
-                    <div className="flex items-center gap-2">
-                      <code className="font-mono text-xs text-primary">{l.slug}</code>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard?.writeText(`https://${l.slug}`);
-                          toast.success("Copied");
-                        }}
-                        aria-label={`Copy ${l.slug}`}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        <Copy className="size-3" />
-                      </button>
-                    </div>
-                  </td>
-                  <td className="max-w-[180px] truncate py-2.5 text-xs text-muted-foreground">
-                    {l.dest}
-                  </td>
-                  <td className="py-2.5 text-right font-display text-xs font-semibold">
-                    {l.clicks.toLocaleString()}
-                  </td>
-                  <td className="py-2.5 text-right text-xs text-muted-foreground">
-                    {l.users.toLocaleString()}
-                  </td>
-                  <td className="w-32 py-2.5 pl-6">
-                    <Progress value={l.ctr} className="h-1" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
