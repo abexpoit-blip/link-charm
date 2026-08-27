@@ -211,22 +211,23 @@ function Home() {
           <div className="relative">
             <h2 className="text-3xl font-bold sm:text-4xl">Start snipping in under a minute</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              1,000 branded links on the free plan. Upgrade only when your traffic does.
+              Unlimited links, 5% or 10% traffic routing, 500,000 clicks weekly — all free.
             </p>
             <div className="mt-8 flex justify-center">
               <Button size="xl" variant="hero" asChild>
-                <Link to="/pricing">
-                  See pricing <ArrowRight className="size-4" />
+                <Link to="/traffic">
+                  See the traffic system <ArrowRight className="size-4" />
                 </Link>
               </Button>
             </div>
             <ul className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground">
-              {["No credit card", "Unlimited clicks", "Cancel anytime"].map((i) => (
+              {["No credit card", "No paid tier", "Weekly quota resets"].map((i) => (
                 <li key={i} className="inline-flex items-center gap-2">
                   <Check className="size-4 text-primary" /> {i}
                 </li>
               ))}
             </ul>
+
           </div>
         </div>
       </section>
