@@ -18,12 +18,14 @@ import {
   QrCode,
   Radar,
   Rocket,
+  Smartphone,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { LinkCreator } from "@/components/site/LinkCreator";
+
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
