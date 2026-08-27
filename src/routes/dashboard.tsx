@@ -18,12 +18,14 @@ import {
   QrCode,
   Radar,
   Rocket,
+  Smartphone,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { LinkCreator } from "@/components/site/LinkCreator";
+
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -180,16 +182,9 @@ function Dashboard() {
                   </button>
                 ))}
               </div>
-              <div className="mt-3 flex gap-2">
-                <Input placeholder="Paste URL…" className="h-9 bg-background/60 text-sm" />
-                <Button
-                  variant="hero"
-                  className="h-9 px-4"
-                  onClick={() => toast.success("Short link created")}
-                >
-                  Create
-                </Button>
-              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {rate === "5" ? "Steady drip · human-paced" : "Launch burst · 2x pace"}
+              </p>
             </div>
           </div>
         </section>
@@ -198,7 +193,7 @@ function Dashboard() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {kpis.map((k) => (
             <div key={k.label} className="surface-glass lift flex items-center gap-3 rounded-xl p-4">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+              <span className="icon-tile size-9 shrink-0">
                 <k.icon className="size-4" />
               </span>
               <div className="min-w-0">
@@ -213,8 +208,10 @@ function Dashboard() {
           ))}
         </div>
 
+
         {/* Main grid — everything in little space */}
         <div className="mt-3 grid items-start gap-3 lg:grid-cols-[1.5fr_1fr]">
+          <div className="grid gap-3">
           <div className="surface-glass rounded-2xl p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
@@ -267,71 +264,95 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* three mini panels stacked tight */}
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <MiniList title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
-            <MiniList title="Sources" rows={sources.map((s) => [s.s, s.p] as const)} />
-            <MiniList title="Devices" rows={devices.map((d) => [d.d, d.p] as const)} />
+          {/* Dense link table */}
+          <div className="surface-glass overflow-x-auto rounded-2xl p-5">
+            <h2 className="text-sm font-semibold">Links · clicks & users</h2>
+            <table className="mt-4 w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-muted-foreground">
+                  <th className="pb-2 font-normal">Short link</th>
+                  <th className="pb-2 font-normal">Destination</th>
+                  <th className="pb-2 text-right font-normal">Clicks</th>
+                  <th className="pb-2 text-right font-normal">Users</th>
+                  <th className="pb-2 pl-6 font-normal">Share</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {links.map((l) => (
+                  <tr key={l.slug}>
+                    <td className="py-2.5">
+                      <div className="flex items-center gap-2">
+                        <code className="font-mono text-xs text-primary">{l.slug}</code>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard?.writeText(`https://${l.slug}`);
+                            toast.success("Copied");
+                          }}
+                          aria-label={`Copy ${l.slug}`}
+                          className="text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <Copy className="size-3" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="max-w-[180px] truncate py-2.5 text-xs text-muted-foreground">
+                      {l.dest}
+                    </td>
+                    <td className="py-2.5 text-right font-display text-xs font-semibold">
+                      {l.clicks.toLocaleString()}
+                    </td>
+                    <td className="py-2.5 text-right text-xs text-muted-foreground">
+                      {l.users.toLocaleString()}
+                    </td>
+                    <td className="w-32 py-2.5 pl-6">
+                      <Progress value={l.ctr} className="h-1" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+          </div>
+
+          {/* creator + mini panels stacked tight */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="surface-glass rounded-2xl p-5 sm:col-span-2 lg:col-span-1">
+              <LinkCreator compact />
+            </div>
+            <MiniList icon={Globe} title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
+            <MiniList icon={Radar} title="Sources" rows={sources.map((s) => [s.s, s.p] as const)} />
+            <MiniList
+              icon={Smartphone}
+              title="Devices"
+              rows={devices.map((d) => [d.d, d.p] as const)}
+            />
+          </div>
+
         </div>
 
-        {/* Dense link table */}
-        <div className="surface-glass mt-3 overflow-x-auto rounded-2xl p-5">
-          <h2 className="text-sm font-semibold">Links · clicks & users</h2>
-          <table className="mt-4 w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs text-muted-foreground">
-                <th className="pb-2 font-normal">Short link</th>
-                <th className="pb-2 font-normal">Destination</th>
-                <th className="pb-2 text-right font-normal">Clicks</th>
-                <th className="pb-2 text-right font-normal">Users</th>
-                <th className="pb-2 pl-6 font-normal">Share</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {links.map((l) => (
-                <tr key={l.slug}>
-                  <td className="py-2.5">
-                    <div className="flex items-center gap-2">
-                      <code className="font-mono text-xs text-primary">{l.slug}</code>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard?.writeText(`https://${l.slug}`);
-                          toast.success("Copied");
-                        }}
-                        aria-label={`Copy ${l.slug}`}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        <Copy className="size-3" />
-                      </button>
-                    </div>
-                  </td>
-                  <td className="max-w-[180px] truncate py-2.5 text-xs text-muted-foreground">
-                    {l.dest}
-                  </td>
-                  <td className="py-2.5 text-right font-display text-xs font-semibold">
-                    {l.clicks.toLocaleString()}
-                  </td>
-                  <td className="py-2.5 text-right text-xs text-muted-foreground">
-                    {l.users.toLocaleString()}
-                  </td>
-                  <td className="w-32 py-2.5 pl-6">
-                    <Progress value={l.ctr} className="h-1" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
 }
 
-function MiniList({ title, rows }: { title: string; rows: readonly (readonly [string, number])[] }) {
+function MiniList({
+  title,
+  icon: Icon,
+  rows,
+}: {
+  title: string;
+  icon: LucideIcon;
+  rows: readonly (readonly [string, number])[];
+}) {
   return (
     <div className="surface-glass rounded-2xl p-5">
-      <h2 className="text-sm font-semibold">{title}</h2>
+      <h2 className="flex items-center gap-2 text-sm font-semibold">
+        <span className="icon-tile size-7">
+          <Icon className="size-3.5" />
+        </span>
+        {title}
+      </h2>
+
       <ul className="mt-3 space-y-2.5">
         {rows.map(([label, p]) => (
           <li key={label}>

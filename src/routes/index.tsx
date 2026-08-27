@@ -1,13 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import {
   ArrowRight,
   BarChart3,
   Check,
-  Copy,
   Gauge,
   Globe,
-  Link2,
   QrCode,
   Radar,
   Rocket,
@@ -17,9 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { LinkCreator } from "@/components/site/LinkCreator";
 import heroImage from "@/assets/hero-links.jpg";
 
 export const Route = createFileRoute("/")({
@@ -82,19 +78,6 @@ const features = [
 ];
 
 function Home() {
-  const [url, setUrl] = useState("");
-  const [short, setShort] = useState("snip.gy/launch-2026");
-
-  const handleShorten = () => {
-    if (!url.trim()) {
-      toast.error("Paste a link first");
-      return;
-    }
-    const slug = Math.random().toString(36).slice(2, 8);
-    setShort(`snip.gy/${slug}`);
-    toast.success("Short link ready");
-  };
-
   return (
     <div>
       {/* Hero */}
@@ -149,35 +132,10 @@ function Home() {
               className="w-full rounded-3xl border border-border object-cover opacity-90"
             />
 
-            <div className="surface-glass glow-ring absolute -bottom-10 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Link2 className="size-4 text-primary" />
-                Shorten your link
-              </div>
-              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                <Input
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="Paste your long URL here…"
-                  className="h-11 flex-1 border-border bg-background/60"
-                />
-                <Button variant="hero" className="h-11 px-6" onClick={handleShorten}>
-                  Shorten <ArrowRight className="size-4" />
-                </Button>
-              </div>
-              <div className="mt-3 flex items-center justify-between rounded-xl border border-border bg-background/50 px-4 py-3">
-                <code className="font-mono text-sm text-primary">{short}</code>
-                <button
-                  onClick={() => {
-                    navigator.clipboard?.writeText(`https://${short}`);
-                    toast.success("Copied to clipboard");
-                  }}
-                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  <Copy className="size-3.5" /> Copy
-                </button>
-              </div>
+            <div className="surface-glass glow-ring absolute -bottom-16 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
+              <LinkCreator compact />
             </div>
+
           </div>
         </div>
       </section>

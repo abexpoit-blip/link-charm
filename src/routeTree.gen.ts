@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as TrafficRouteImport } from './routes/traffic'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
   path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrafficRoute = TrafficRouteImport.update({
   id: '/traffic',
   path: '/traffic',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/features': typeof FeaturesRoute
+  '/support': typeof SupportRoute
   '/traffic': typeof TrafficRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/features': typeof FeaturesRoute
+  '/support': typeof SupportRoute
   '/traffic': typeof TrafficRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/features': typeof FeaturesRoute
+  '/support': typeof SupportRoute
   '/traffic': typeof TrafficRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/features' | '/traffic'
+  fullPaths: '/' | '/dashboard' | '/features' | '/support' | '/traffic'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/features' | '/traffic'
-  id: '__root__' | '/' | '/dashboard' | '/features' | '/traffic'
+  to: '/' | '/dashboard' | '/features' | '/support' | '/traffic'
+  id: '__root__' | '/' | '/dashboard' | '/features' | '/support' | '/traffic'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   FeaturesRoute: typeof FeaturesRoute
+  SupportRoute: typeof SupportRoute
   TrafficRoute: typeof TrafficRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/traffic': {
       id: '/traffic'
       path: '/traffic'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   FeaturesRoute: FeaturesRoute,
+  SupportRoute: SupportRoute,
   TrafficRoute: TrafficRoute,
 }
 export const routeTree = rootRouteImport
