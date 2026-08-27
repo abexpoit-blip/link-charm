@@ -1,13 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import {
   ArrowRight,
   BarChart3,
   Check,
-  Copy,
   Gauge,
   Globe,
-  Link2,
   QrCode,
   Radar,
   Rocket,
@@ -17,9 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { LinkCreator } from "@/components/site/LinkCreator";
 import heroImage from "@/assets/hero-links.jpg";
 
 export const Route = createFileRoute("/")({
@@ -82,19 +78,6 @@ const features = [
 ];
 
 function Home() {
-  const [url, setUrl] = useState("");
-  const [short, setShort] = useState("snip.gy/launch-2026");
-
-  const handleShorten = () => {
-    if (!url.trim()) {
-      toast.error("Paste a link first");
-      return;
-    }
-    const slug = Math.random().toString(36).slice(2, 8);
-    setShort(`snip.gy/${slug}`);
-    toast.success("Short link ready");
-  };
-
   return (
     <div>
       {/* Hero */}

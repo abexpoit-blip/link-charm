@@ -22,6 +22,9 @@ export function Footer() {
           <Link to="/dashboard" className="transition-colors hover:text-foreground">
             Dashboard
           </Link>
+          <Link to="/support" className="transition-colors hover:text-foreground">
+            Support
+          </Link>
         </nav>
         <p className="text-xs text-muted-foreground">© 2026 Snip. Short links, deep insight.</p>
       </div>
