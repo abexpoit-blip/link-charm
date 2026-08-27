@@ -99,8 +99,9 @@ function Home() {
 
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
               Snip turns every long URL into a branded, trackable asset — then pushes our own
-              network traffic into it at 5% or 10%, free, up to 500,000 clicks a week.
+              network traffic into it, free, up to 500,000 clicks a week.
             </p>
+
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button size="xl" variant="hero" asChild>
