@@ -126,20 +126,20 @@ function Home() {
           </div>
 
 
-          <div className="relative">
+          <div className="surface-glass glow-ring overflow-hidden rounded-3xl p-2">
             <img
               src={heroImage}
               alt="Glowing chain links dissolving into analytics data streams"
               width={1280}
               height={1024}
-              className="w-full rounded-3xl border border-border object-cover opacity-90"
+              className="h-44 w-full rounded-2xl object-cover sm:h-56 lg:h-64"
             />
 
-            <div className="surface-glass glow-ring absolute -bottom-16 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
+            <div className="p-3 sm:p-5">
               <LinkCreator compact />
             </div>
-
           </div>
+
         </div>
       </section>
 
