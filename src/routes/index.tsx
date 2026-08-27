@@ -5,14 +5,18 @@ import {
   BarChart3,
   Check,
   Copy,
+  Gauge,
   Globe,
   Link2,
   QrCode,
+  Radar,
+  Rocket,
   Shield,
   Sparkles,
   Split,
   Zap,
 } from "lucide-react";
+
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
