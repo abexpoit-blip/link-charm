@@ -1,14 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Area,
   AreaChart,
-  CartesianGrid,
+  Bar,
+  BarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
-import { ArrowUpRight, Copy, Globe, MousePointerClick, QrCode, Users } from "lucide-react";
+import {
+  ArrowUpRight,
+  Copy,
+  Gauge,
+  Globe,
+  MousePointerClick,
+  QrCode,
+  Radar,
+  Rocket,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,127 +28,224 @@ import { Progress } from "@/components/ui/progress";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Link Dashboard — Clicks, Geography & QR | Snip" },
+      { title: "Traffic Console — Clicks, Users & Quota | Snip" },
       {
         name: "description",
         content:
-          "Track short link performance in real time: click trends, top links, geography breakdown and QR downloads.",
+          "A dense, single-screen console: weekly quota, 5% or 10% traffic routing, live click trend, visitor sources and top links.",
       },
-      { property: "og:title", content: "Link Dashboard — Clicks, Geography & QR | Snip" },
+      { property: "og:title", content: "Traffic Console — Clicks, Users & Quota | Snip" },
       {
         property: "og:description",
-        content: "Real-time click trends, top-performing links and geography insight.",
+        content: "Every click, user and quota number on one compact premium screen.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Dashboard,
 });
 
 const series = [
-  { d: "Mon", clicks: 1820, unique: 1240 },
-  { d: "Tue", clicks: 2410, unique: 1610 },
-  { d: "Wed", clicks: 2190, unique: 1490 },
-  { d: "Thu", clicks: 3280, unique: 2180 },
-  { d: "Fri", clicks: 4120, unique: 2740 },
-  { d: "Sat", clicks: 3560, unique: 2310 },
-  { d: "Sun", clicks: 4890, unique: 3120 },
+  { d: "Mon", clicks: 41200, unique: 28100 },
+  { d: "Tue", clicks: 52400, unique: 34600 },
+  { d: "Wed", clicks: 47800, unique: 31200 },
+  { d: "Thu", clicks: 61900, unique: 40800 },
+  { d: "Fri", clicks: 73500, unique: 48200 },
+  { d: "Sat", clicks: 58200, unique: 37700 },
+  { d: "Sun", clicks: 69400, unique: 45100 },
 ];
 
+const hours = Array.from({ length: 24 }, (_, i) => ({
+  h: `${i}`,
+  v: Math.round(900 + Math.sin(i / 2.4) * 620 + (i % 5) * 130),
+}));
+
 const kpis = [
-  { icon: MousePointerClick, label: "Total clicks", value: "22,270", delta: "+18.4%" },
-  { icon: Users, label: "Unique visitors", value: "14,690", delta: "+12.1%" },
-  { icon: Globe, label: "Countries", value: "94", delta: "+6" },
-  { icon: QrCode, label: "QR scans", value: "3,412", delta: "+24.7%" },
+  { icon: MousePointerClick, label: "Clicks", value: "404,400", delta: "+18.4%" },
+  { icon: Users, label: "Unique users", value: "265,700", delta: "+12.1%" },
+  { icon: Globe, label: "Countries", value: "184", delta: "+6" },
+  { icon: QrCode, label: "QR scans", value: "18,940", delta: "+24.7%" },
 ];
 
 const links = [
-  { slug: "snip.gy/launch-2026", dest: "acme.com/product/launch", clicks: 8412, ctr: 78 },
-  { slug: "snip.gy/spring-sale", dest: "acme.com/sale/spring", clicks: 5230, ctr: 61 },
-  { slug: "snip.gy/dev-docs", dest: "docs.acme.com/getting-started", clicks: 3980, ctr: 44 },
-  { slug: "snip.gy/podcast-ep12", dest: "acme.com/podcast/12", clicks: 2611, ctr: 33 },
+  { slug: "snip.gy/launch-2026", dest: "acme.com/product/launch", clicks: 148120, users: 96400, ctr: 88 },
+  { slug: "snip.gy/spring-sale", dest: "acme.com/sale/spring", clicks: 92300, users: 61050, ctr: 64 },
+  { slug: "snip.gy/dev-docs", dest: "docs.acme.com/start", clicks: 71980, users: 44210, ctr: 47 },
+  { slug: "snip.gy/podcast-12", dest: "acme.com/podcast/12", clicks: 46110, users: 29880, ctr: 31 },
+  { slug: "snip.gy/newsletter", dest: "acme.com/subscribe", clicks: 29440, users: 18700, ctr: 22 },
 ];
 
 const geo = [
-  { country: "United States", pct: 38 },
-  { country: "Bangladesh", pct: 21 },
-  { country: "Germany", pct: 16 },
-  { country: "Brazil", pct: 14 },
-  { country: "Japan", pct: 11 },
+  { c: "United States", p: 31 },
+  { c: "Bangladesh", p: 24 },
+  { c: "India", p: 17 },
+  { c: "Germany", p: 15 },
+  { c: "Brazil", p: 13 },
+];
+
+const sources = [
+  { s: "Direct", p: 42 },
+  { s: "Social", p: 27 },
+  { s: "Search", p: 19 },
+  { s: "Referral", p: 12 },
+];
+
+const devices = [
+  { d: "Mobile", p: 63 },
+  { d: "Desktop", p: 29 },
+  { d: "Tablet", p: 8 },
 ];
 
 function Dashboard() {
+  const [rate, setRate] = useState<"5" | "10">("10");
+  const quota = 500000;
+  const used = rate === "10" ? 404400 : 212300;
+  const pct = Math.round((used / quota) * 100);
+
   return (
     <div className="relative">
-      <div className="hero-aura pointer-events-none absolute inset-x-0 top-0 h-80" />
+      <div className="hero-aura pointer-events-none absolute inset-x-0 top-0 h-72" />
 
-      <div className="relative mx-auto max-w-6xl px-5 py-14">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold sm:text-4xl">Workspace overview</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Last 7 days · acme.snip.gy</p>
-          </div>
-          <div className="flex w-full max-w-md gap-2">
-            <Input placeholder="Paste a URL to shorten…" className="h-10 bg-background/60" />
-            <Button variant="hero" className="h-10 px-5" onClick={() => toast.success("Link created")}>
-              Create
-            </Button>
-          </div>
-        </div>
+      <div className="relative mx-auto max-w-6xl px-5 py-8">
+        {/* Unique compact hero: quota dial + routing switch + live ticker */}
+        <section className="surface-glass glow-ring overflow-hidden rounded-3xl">
+          <div className="grid gap-px bg-border/60 md:grid-cols-[auto_1fr_auto]">
+            {/* quota dial */}
+            <div className="flex items-center gap-5 bg-background/40 p-6">
+              <div
+                className="relative grid size-24 place-items-center rounded-full"
+                style={{
+                  background: `conic-gradient(var(--color-primary) ${pct * 3.6}deg, color-mix(in oklab, var(--foreground) 10%, transparent) 0)`,
+                }}
+              >
+                <div className="grid size-[76px] place-items-center rounded-full bg-background">
+                  <span className="font-display text-xl font-bold">{pct}%</span>
+                </div>
+              </div>
+              <div>
+                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Gauge className="size-3.5 text-primary" /> Weekly quota
+                </p>
+                <p className="mt-1 font-display text-2xl font-bold">{used.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">of {quota.toLocaleString()} · free</p>
+              </div>
+            </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {kpis.map((k) => (
-            <div key={k.label} className="surface-glass lift rounded-2xl p-5">
+            {/* live ticker */}
+            <div className="bg-background/40 p-6">
               <div className="flex items-center justify-between">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                  <k.icon className="size-4" />
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs text-primary">
-                  <ArrowUpRight className="size-3" />
-                  {k.delta}
+                <p className="text-xs text-muted-foreground">Live clicks · last 24h</p>
+                <span className="inline-flex items-center gap-1.5 text-xs text-primary">
+                  <span className="size-1.5 animate-pulse rounded-full bg-primary" /> streaming
                 </span>
               </div>
-              <p className="mt-4 font-display text-3xl font-bold">{k.value}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{k.label}</p>
+              <div className="mt-3 h-20 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={hours}>
+                    <Bar dataKey="v" fill="var(--color-chart-1)" radius={2} />
+                    <XAxis dataKey="h" hide />
+                    <Tooltip
+                      cursor={{ fill: "transparent" }}
+                      contentStyle={{
+                        background: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: 10,
+                        fontSize: 12,
+                      }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* routing switch */}
+            <div className="bg-background/40 p-6">
+              <p className="text-xs text-muted-foreground">Our traffic routing</p>
+              <div className="mt-3 flex gap-2">
+                {(["5", "10"] as const).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => {
+                      setRate(r);
+                      toast.success(`Routing set to ${r}%`);
+                    }}
+                    className={`flex flex-1 items-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${
+                      rate === r
+                        ? "border-primary/60 bg-primary/12 text-primary"
+                        : "border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {r === "5" ? <Radar className="size-4" /> : <Rocket className="size-4" />} {r}%
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Input placeholder="Paste URL…" className="h-9 bg-background/60 text-sm" />
+                <Button
+                  variant="hero"
+                  className="h-9 px-4"
+                  onClick={() => toast.success("Short link created")}
+                >
+                  Create
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* KPI strip — dense */}
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {kpis.map((k) => (
+            <div key={k.label} className="surface-glass lift flex items-center gap-3 rounded-xl p-4">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+                <k.icon className="size-4" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-display text-xl leading-none font-bold">{k.value}</p>
+                <p className="mt-1 truncate text-xs text-muted-foreground">{k.label}</p>
+              </div>
+              <span className="ml-auto inline-flex items-center gap-0.5 text-xs text-primary">
+                <ArrowUpRight className="size-3" />
+                {k.delta}
+              </span>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
-          <div className="surface-glass rounded-2xl p-6">
-            <h2 className="text-lg font-semibold">Click trend</h2>
-            <div className="mt-6 h-72 w-full">
+        {/* Main grid — everything in little space */}
+        <div className="mt-3 grid gap-3 lg:grid-cols-[1.5fr_1fr]">
+          <div className="surface-glass rounded-2xl p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
+              <p className="text-xs text-muted-foreground">7 days · {rate}% routing</p>
+            </div>
+            <div className="mt-4 h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={series} margin={{ left: -20, right: 8 }}>
+                <AreaChart data={series} margin={{ left: 0, right: 4, top: 4 }}>
                   <defs>
-                    <linearGradient id="clicksFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.55} />
+                    <linearGradient id="c1" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.5} />
                       <stop offset="100%" stopColor="var(--color-chart-1)" stopOpacity={0} />
                     </linearGradient>
-                    <linearGradient id="uniqueFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.4} />
+                    <linearGradient id="c2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.35} />
                       <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
                   <XAxis
                     dataKey="d"
                     tickLine={false}
                     axisLine={false}
                     stroke="var(--color-muted-foreground)"
-                    fontSize={12}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    stroke="var(--color-muted-foreground)"
-                    fontSize={12}
+                    fontSize={11}
                   />
                   <Tooltip
                     contentStyle={{
                       background: "var(--color-card)",
                       border: "1px solid var(--color-border)",
-                      borderRadius: 12,
-                      color: "var(--color-foreground)",
+                      borderRadius: 10,
+                      fontSize: 12,
                     }}
                   />
                   <Area
@@ -145,73 +253,96 @@ function Dashboard() {
                     dataKey="clicks"
                     stroke="var(--color-chart-1)"
                     strokeWidth={2}
-                    fill="url(#clicksFill)"
+                    fill="url(#c1)"
                   />
                   <Area
                     type="monotone"
                     dataKey="unique"
                     stroke="var(--color-chart-2)"
                     strokeWidth={2}
-                    fill="url(#uniqueFill)"
+                    fill="url(#c2)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="surface-glass rounded-2xl p-6">
-            <h2 className="text-lg font-semibold">Top geographies</h2>
-            <ul className="mt-6 space-y-5">
-              {geo.map((g) => (
-                <li key={g.country}>
-                  <div className="flex justify-between text-sm">
-                    <span>{g.country}</span>
-                    <span className="text-muted-foreground">{g.pct}%</span>
-                  </div>
-                  <Progress value={g.pct * 2.4} className="mt-2 h-1.5" />
-                </li>
-              ))}
-            </ul>
+          {/* three mini panels stacked tight */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <MiniList title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
+            <MiniList title="Sources" rows={sources.map((s) => [s.s, s.p] as const)} />
+            <MiniList title="Devices" rows={devices.map((d) => [d.d, d.p] as const)} />
           </div>
         </div>
 
-        <div className="surface-glass mt-4 rounded-2xl p-6">
-          <h2 className="text-lg font-semibold">Top links</h2>
-          <div className="mt-5 divide-y divide-border">
-            {links.map((l) => (
-              <div
-                key={l.slug}
-                className="flex flex-wrap items-center justify-between gap-4 py-4 first:pt-0"
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <code className="font-mono text-sm text-primary">{l.slug}</code>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard?.writeText(`https://${l.slug}`);
-                        toast.success("Copied");
-                      }}
-                      className="text-muted-foreground transition-colors hover:text-foreground"
-                      aria-label={`Copy ${l.slug}`}
-                    >
-                      <Copy className="size-3.5" />
-                    </button>
-                  </div>
-                  <p className="mt-1 truncate text-xs text-muted-foreground">{l.dest}</p>
-                </div>
-                <div className="flex items-center gap-8">
-                  <div className="w-28">
-                    <Progress value={l.ctr} className="h-1.5" />
-                  </div>
-                  <span className="font-display text-sm font-semibold">
+        {/* Dense link table */}
+        <div className="surface-glass mt-3 overflow-x-auto rounded-2xl p-5">
+          <h2 className="text-sm font-semibold">Links · clicks & users</h2>
+          <table className="mt-4 w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs text-muted-foreground">
+                <th className="pb-2 font-normal">Short link</th>
+                <th className="pb-2 font-normal">Destination</th>
+                <th className="pb-2 text-right font-normal">Clicks</th>
+                <th className="pb-2 text-right font-normal">Users</th>
+                <th className="pb-2 pl-6 font-normal">Share</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {links.map((l) => (
+                <tr key={l.slug}>
+                  <td className="py-2.5">
+                    <div className="flex items-center gap-2">
+                      <code className="font-mono text-xs text-primary">{l.slug}</code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard?.writeText(`https://${l.slug}`);
+                          toast.success("Copied");
+                        }}
+                        aria-label={`Copy ${l.slug}`}
+                        className="text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        <Copy className="size-3" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="max-w-[180px] truncate py-2.5 text-xs text-muted-foreground">
+                    {l.dest}
+                  </td>
+                  <td className="py-2.5 text-right font-display text-xs font-semibold">
                     {l.clicks.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                  <td className="py-2.5 text-right text-xs text-muted-foreground">
+                    {l.users.toLocaleString()}
+                  </td>
+                  <td className="w-32 py-2.5 pl-6">
+                    <Progress value={l.ctr} className="h-1" />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+    </div>
+  );
+}
+
+function MiniList({ title, rows }: { title: string; rows: readonly (readonly [string, number])[] }) {
+  return (
+    <div className="surface-glass rounded-2xl p-5">
+      <h2 className="text-sm font-semibold">{title}</h2>
+      <ul className="mt-3 space-y-2.5">
+        {rows.map(([label, p]) => (
+          <li key={label}>
+            <div className="flex justify-between text-xs">
+              <span>{label}</span>
+              <span className="text-muted-foreground">{p}%</span>
+            </div>
+            <Progress value={p * 2.2} className="mt-1.5 h-1" />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
