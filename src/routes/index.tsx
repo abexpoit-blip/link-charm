@@ -39,9 +39,10 @@ export const Route = createFileRoute("/")({
 
 const highlights = [
   { icon: Gauge, title: "500,000 clicks / week", body: "Shared free quota, resets every Monday." },
-  { icon: Radar, title: "5% traffic routing", body: "Steady, human-paced drip into your links." },
-  { icon: Rocket, title: "10% traffic routing", body: "Launch mode burst without extra cost." },
+  { icon: Radar, title: "Steady mode", body: "Human-paced drip of real traffic into your links." },
+  { icon: Rocket, title: "Launch mode", body: "Burst pacing for launch days — still free." },
 ];
+
 
 
 const features = [
