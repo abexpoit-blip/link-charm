@@ -37,12 +37,12 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const stats = [
-  { value: "4.2B", label: "Links resolved" },
-  { value: "38ms", label: "Median redirect" },
-  { value: "99.99%", label: "Edge uptime" },
-  { value: "180+", label: "Countries tracked" },
+const highlights = [
+  { icon: Gauge, title: "500,000 clicks / week", body: "Shared free quota, resets every Monday." },
+  { icon: Radar, title: "5% traffic routing", body: "Steady, human-paced drip into your links." },
+  { icon: Rocket, title: "10% traffic routing", body: "Launch mode burst without extra cost." },
 ];
+
 
 const features = [
   {
