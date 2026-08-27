@@ -133,14 +133,14 @@ export function LinkCreator({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-sm font-medium">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2 text-sm font-medium">
           <span className="icon-tile size-7">
             <Link2 className="size-3.5" />
           </span>
           Create a short link
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/50 px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-background/50 px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
           <BarChart3 className="size-3 text-primary" />
           {totalClicks.toLocaleString()} clicks
         </span>
@@ -163,20 +163,20 @@ export function LinkCreator({ compact = false }: { compact?: boolean }) {
       </div>
 
       <div className="mt-2 flex items-center gap-2 rounded-xl border border-border bg-background/40 px-3">
-        <span className="font-mono text-xs text-muted-foreground">{DOMAIN}/</span>
+        <span className="shrink-0 font-mono text-xs text-muted-foreground">{DOMAIN}/</span>
         <input
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && create()}
           placeholder="custom-slug (optional)"
           aria-label="Custom slug"
-          className="h-9 flex-1 bg-transparent font-mono text-xs outline-none placeholder:text-muted-foreground/70"
+          className="h-9 w-full min-w-0 flex-1 bg-transparent font-mono text-xs outline-none placeholder:text-muted-foreground/70"
         />
         <button
           onClick={() => setSlug(randomSlug())}
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-primary"
         >
-          <Wand2 className="size-3.5" /> Random
+          <Wand2 className="size-3.5" /> <span className="hidden xs:inline sm:inline">Random</span>
         </button>
       </div>
 
@@ -184,7 +184,7 @@ export function LinkCreator({ compact = false }: { compact?: boolean }) {
         {links.map((l) => (
           <li
             key={l.slug}
-            className="group flex items-center gap-3 rounded-xl border border-border bg-background/50 px-3 py-2.5 transition-colors hover:border-primary/35"
+            className="group flex items-center gap-2.5 rounded-xl sm:gap-3 border border-border bg-background/50 px-3 py-2.5 transition-colors hover:border-primary/35"
           >
             <button
               onClick={() => setQrFor(l)}
