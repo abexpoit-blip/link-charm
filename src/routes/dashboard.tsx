@@ -220,7 +220,7 @@ function Dashboard() {
               <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
               <p className="text-xs text-muted-foreground">7 days · {rate}% routing</p>
             </div>
-            <div className="mt-4 h-56 w-full">
+            <div className="mt-4 h-[26rem] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={series} margin={{ left: 0, right: 4, top: 4 }}>
                   <defs>
