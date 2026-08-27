@@ -330,10 +330,24 @@ function Dashboard() {
   );
 }
 
-function MiniList({ title, rows }: { title: string; rows: readonly (readonly [string, number])[] }) {
+function MiniList({
+  title,
+  icon: Icon,
+  rows,
+}: {
+  title: string;
+  icon: LucideIcon;
+  rows: readonly (readonly [string, number])[];
+}) {
   return (
     <div className="surface-glass rounded-2xl p-5">
-      <h2 className="text-sm font-semibold">{title}</h2>
+      <h2 className="flex items-center gap-2 text-sm font-semibold">
+        <span className="icon-tile size-7">
+          <Icon className="size-3.5" />
+        </span>
+        {title}
+      </h2>
+
       <ul className="mt-3 space-y-2.5">
         {rows.map(([label, p]) => (
           <li key={label}>
