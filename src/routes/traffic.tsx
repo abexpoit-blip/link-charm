@@ -42,7 +42,7 @@ const modes = [
   {
     id: "5" as const,
     rate: "Steady",
-    title: "Steady boost",
+    title: "Everyday routing",
     icon: Radar,
     desc: "Our network traffic drips into your links slowly — a natural, human-shaped curve.",
     perks: ["~25,000 clicks / day", "Natural drip pacing", "Bot filtered sources", "Geo mix: 180+"],
@@ -50,7 +50,7 @@ const modes = [
   {
     id: "10" as const,
     rate: "Launch",
-    title: "Launch boost",
+    title: "Launch day routing",
     icon: Rocket,
     desc: "Launch pacing — double the flow while staying inside the same weekly quota.",
     perks: ["~50,000 clicks / day", "Burst pacing", "Referrer variety", "Priority edge lanes"],
