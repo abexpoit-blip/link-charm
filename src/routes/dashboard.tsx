@@ -214,7 +214,7 @@ function Dashboard() {
         </div>
 
         {/* Main grid — everything in little space */}
-        <div className="mt-3 grid gap-3 lg:grid-cols-[1.5fr_1fr]">
+        <div className="mt-3 grid items-start gap-3 lg:grid-cols-[1.5fr_1fr]">
           <div className="surface-glass rounded-2xl p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
