@@ -169,7 +169,7 @@ function Dashboard() {
         {/* Console toolbar */}
         <div className="mb-3 flex flex-wrap items-center gap-3">
           <h1 className="font-display text-xl font-bold sheen-text">Traffic console</h1>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex flex-wrap items-center gap-2">
             <div className="flex rounded-xl border border-border bg-background/50 p-1">
               {RANGES.map((r) => (
                 <button
@@ -205,7 +205,7 @@ function Dashboard() {
         {/* Quota dial + ticker + routing switch */}
         <section className="surface-glass ring-soft overflow-hidden rounded-3xl">
           <div className="grid gap-px bg-border/60 md:grid-cols-[auto_1fr_auto]">
-            <div className="flex items-center gap-5 bg-background/40 p-6">
+            <div className="flex items-center gap-4 bg-background/40 p-5 sm:gap-5 sm:p-6">
               <div
                 className="relative grid size-24 place-items-center rounded-full transition-all duration-500"
                 style={{
@@ -225,7 +225,7 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="bg-background/40 p-6">
+            <div className="min-w-0 bg-background/40 p-5 sm:p-6">
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">Live clicks · last 24h</p>
                 <span className="inline-flex items-center gap-1.5 text-xs text-primary">
@@ -258,7 +258,7 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="bg-background/40 p-6">
+            <div className="min-w-0 bg-background/40 p-5 sm:p-6">
               <p className="text-xs text-muted-foreground">Our traffic routing</p>
               <div className="mt-3 flex gap-2">
                 {(["5", "10"] as const).map((r) => (
@@ -317,7 +317,7 @@ function Dashboard() {
                   {range} · {rate}% routing
                 </p>
               </div>
-              <div className="mt-4 h-[26rem] w-full">
+              <div className="mt-4 h-64 w-full sm:h-[26rem]">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={series} margin={{ left: 0, right: 4, top: 4 }}>
                     <defs>
@@ -365,7 +365,7 @@ function Dashboard() {
             </div>
 
             {/* Link table with search, sort, export */}
-            <div className="surface-glass rounded-2xl p-5">
+            <div className="surface-glass min-w-0 rounded-2xl p-4 sm:p-5">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-sm font-semibold">Links · clicks & users</h2>
                 <div className="ml-auto flex items-center gap-2">
@@ -376,7 +376,7 @@ function Dashboard() {
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Filter links…"
                       aria-label="Filter links"
-                      className="h-8 w-40 border-border bg-background/60 pl-8 text-xs"
+                      className="h-8 w-32 border-border sm:w-40 bg-background/60 pl-8 text-xs"
                     />
                   </div>
                   <button
@@ -396,8 +396,8 @@ function Dashboard() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="mt-4 w-full text-sm">
+              <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+                <table className="mt-4 w-full min-w-[560px] text-sm">
                   <thead>
                     <tr className="text-left text-xs text-muted-foreground">
                       <th className="pb-2 font-normal">Short link</th>
@@ -452,8 +452,8 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="surface-glass rounded-2xl p-5 sm:col-span-2 lg:col-span-1">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="surface-glass min-w-0 rounded-2xl p-4 sm:col-span-2 sm:p-5 lg:col-span-1">
               <LinkCreator compact />
             </div>
             <MiniList icon={Globe} title="Geography" rows={geo.map((g) => [g.c, g.p] as const)} />
@@ -480,7 +480,7 @@ function MiniList({
   rows: readonly (readonly [string, number])[];
 }) {
   return (
-    <div className="surface-glass rounded-2xl p-5">
+    <div className="surface-glass min-w-0 rounded-2xl p-4 sm:p-5">
       <h2 className="flex items-center gap-2 text-sm font-semibold">
         <span className="icon-tile size-7">
           <Icon className="size-3.5" />
