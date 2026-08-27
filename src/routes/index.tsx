@@ -83,6 +83,7 @@ function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="hero-aura pointer-events-none absolute inset-0" />
+        <div className="aurora pointer-events-none absolute inset-0 opacity-70" />
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 py-20 lg:grid-cols-[1.05fr_1fr] lg:py-28">
           <div>
@@ -165,7 +166,7 @@ function Home() {
       {/* Closing CTA */}
       <section className="mx-auto max-w-6xl px-5 pb-28">
         <div className="surface-glass relative overflow-hidden rounded-3xl px-8 py-14 text-center">
-          <div className="hero-aura pointer-events-none absolute inset-0" />
+          <div className="aurora pointer-events-none absolute inset-0 opacity-80" />
           <div className="relative">
             <h2 className="text-3xl font-bold sm:text-4xl">Start snipping in under a minute</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
