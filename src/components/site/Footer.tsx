@@ -15,9 +15,10 @@ export function Footer() {
           <Link to="/features" className="transition-colors hover:text-foreground">
             Features
           </Link>
-          <Link to="/pricing" className="transition-colors hover:text-foreground">
-            Pricing
+          <Link to="/traffic" className="transition-colors hover:text-foreground">
+            Traffic
           </Link>
+
           <Link to="/dashboard" className="transition-colors hover:text-foreground">
             Dashboard
           </Link>
