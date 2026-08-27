@@ -307,9 +307,10 @@ function Dashboard() {
           ))}
         </div>
 
-        <div className="mt-3 grid items-start gap-3 lg:grid-cols-[1.5fr_1fr]">
-          <div className="grid gap-3">
-            <div className="surface-glass rounded-2xl p-5">
+        <div className="mt-3 grid items-start gap-3 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+          <div className="grid min-w-0 gap-3">
+            <div className="surface-glass min-w-0 rounded-2xl p-4 sm:p-5">
+
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
                 <p className="text-xs text-muted-foreground">
