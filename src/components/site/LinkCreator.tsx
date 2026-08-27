@@ -176,7 +176,7 @@ export function LinkCreator({ compact = false }: { compact?: boolean }) {
           onClick={() => setSlug(randomSlug())}
           className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-primary"
         >
-          <Wand2 className="size-3.5" /> <span className="hidden xs:inline sm:inline">Random</span>
+          <Wand2 className="size-3.5" /> <span className="hidden sm:inline">Random</span>
         </button>
       </div>
 
