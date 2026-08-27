@@ -108,9 +108,10 @@ function Features() {
 
         <div className="flex justify-center">
           <Button size="xl" variant="hero" asChild>
-            <Link to="/pricing">
-              Compare plans <ArrowRight className="size-4" />
+            <Link to="/traffic">
+              See the free traffic system <ArrowRight className="size-4" />
             </Link>
+
           </Button>
         </div>
       </section>

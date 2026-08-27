@@ -5,14 +5,18 @@ import {
   BarChart3,
   Check,
   Copy,
+  Gauge,
   Globe,
   Link2,
   QrCode,
+  Radar,
+  Rocket,
   Shield,
   Sparkles,
   Split,
   Zap,
 } from "lucide-react";
+
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,12 +41,12 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const stats = [
-  { value: "4.2B", label: "Links resolved" },
-  { value: "38ms", label: "Median redirect" },
-  { value: "99.99%", label: "Edge uptime" },
-  { value: "180+", label: "Countries tracked" },
+const highlights = [
+  { icon: Gauge, title: "500,000 clicks / week", body: "Shared free quota, resets every Monday." },
+  { icon: Radar, title: "5% traffic routing", body: "Steady, human-paced drip into your links." },
+  { icon: Rocket, title: "10% traffic routing", body: "Launch mode burst without extra cost." },
 ];
+
 
 const features = [
   {
@@ -96,13 +100,12 @@ function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="hero-aura pointer-events-none absolute inset-0" />
-        <div className="grid-lines pointer-events-none absolute inset-0" />
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 py-20 lg:grid-cols-[1.05fr_1fr] lg:py-28">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               <Sparkles className="size-3.5" />
-              Free forever plan · no card required
+              100% free · no paid plan, ever
             </span>
 
             <h1 className="mt-6 text-5xl leading-[1.03] font-bold sm:text-6xl lg:text-7xl">
@@ -110,8 +113,8 @@ function Home() {
             </h1>
 
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-              Snip turns every long URL into a branded, trackable asset. Custom domains, QR codes,
-              A/B routing and click intelligence — in one beautifully fast dashboard.
+              Snip turns every long URL into a branded, trackable asset — then pushes our own
+              network traffic into it at 5% or 10%, free, up to 500,000 clicks a week.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -121,19 +124,21 @@ function Home() {
                 </Link>
               </Button>
               <Button size="xl" variant="glass" asChild>
-                <Link to="/features">Explore features</Link>
+                <Link to="/traffic">Traffic system</Link>
               </Button>
             </div>
 
-            <dl className="mt-12 grid max-w-lg grid-cols-2 gap-6 sm:grid-cols-4">
-              {stats.map((s) => (
-                <div key={s.label}>
-                  <dt className="font-display text-2xl font-bold text-foreground">{s.value}</dt>
-                  <dd className="mt-1 text-xs text-muted-foreground">{s.label}</dd>
-                </div>
+            <ul className="mt-12 grid max-w-lg gap-3 sm:grid-cols-3">
+              {highlights.map((h) => (
+                <li key={h.title} className="surface-glass rounded-xl p-4">
+                  <h.icon className="size-4 text-primary" />
+                  <p className="mt-3 text-sm font-semibold">{h.title}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{h.body}</p>
+                </li>
               ))}
-            </dl>
+            </ul>
           </div>
+
 
           <div className="relative">
             <img
@@ -206,22 +211,23 @@ function Home() {
           <div className="relative">
             <h2 className="text-3xl font-bold sm:text-4xl">Start snipping in under a minute</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              1,000 branded links on the free plan. Upgrade only when your traffic does.
+              Unlimited links, 5% or 10% traffic routing, 500,000 clicks weekly — all free.
             </p>
             <div className="mt-8 flex justify-center">
               <Button size="xl" variant="hero" asChild>
-                <Link to="/pricing">
-                  See pricing <ArrowRight className="size-4" />
+                <Link to="/traffic">
+                  See the traffic system <ArrowRight className="size-4" />
                 </Link>
               </Button>
             </div>
             <ul className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground">
-              {["No credit card", "Unlimited clicks", "Cancel anytime"].map((i) => (
+              {["No credit card", "No paid tier", "Weekly quota resets"].map((i) => (
                 <li key={i} className="inline-flex items-center gap-2">
                   <Check className="size-4 text-primary" /> {i}
                 </li>
               ))}
             </ul>
+
           </div>
         </div>
       </section>
