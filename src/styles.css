@@ -60,33 +60,33 @@
 
 :root {
   --radius: 0.9rem;
-  --background: oklch(0.16 0.017 165);
-  --foreground: oklch(0.97 0.008 160);
-  --surface: oklch(0.21 0.021 166);
-  --surface-2: oklch(0.25 0.026 167);
-  --card: oklch(0.21 0.021 166);
-  --card-foreground: oklch(0.97 0.008 160);
-  --popover: oklch(0.21 0.021 166);
-  --popover-foreground: oklch(0.97 0.008 160);
-  --primary: oklch(0.75 0.19 158);
-  --primary-foreground: oklch(0.17 0.03 165);
-  --primary-glow: oklch(0.86 0.19 165);
-  --secondary: oklch(0.26 0.027 167);
-  --secondary-foreground: oklch(0.96 0.01 160);
-  --muted: oklch(0.25 0.022 167);
-  --muted-foreground: oklch(0.72 0.023 165);
-  --accent: oklch(0.7 0.14 195);
-  --accent-foreground: oklch(0.16 0.02 165);
+  --background: oklch(0.145 0.021 172);
+  --foreground: oklch(0.975 0.008 165);
+  --surface: oklch(0.203 0.026 172);
+  --surface-2: oklch(0.248 0.032 174);
+  --card: oklch(0.203 0.026 172);
+  --card-foreground: oklch(0.975 0.008 165);
+  --popover: oklch(0.19 0.026 172);
+  --popover-foreground: oklch(0.975 0.008 165);
+  --primary: oklch(0.79 0.184 162);
+  --primary-foreground: oklch(0.16 0.035 170);
+  --primary-glow: oklch(0.9 0.16 178);
+  --secondary: oklch(0.26 0.032 174);
+  --secondary-foreground: oklch(0.965 0.01 165);
+  --muted: oklch(0.245 0.026 174);
+  --muted-foreground: oklch(0.755 0.028 172);
+  --accent: oklch(0.74 0.145 205);
+  --accent-foreground: oklch(0.15 0.025 170);
   --destructive: oklch(0.62 0.21 25);
   --destructive-foreground: oklch(0.98 0.005 160);
-  --border: oklch(0.99 0 0 / 10%);
-  --input: oklch(0.99 0 0 / 14%);
+  --border: oklch(0.99 0 0 / 9%);
+  --input: oklch(0.99 0 0 / 13%);
   --ring: oklch(0.75 0.19 158);
   --chart-1: oklch(0.75 0.19 158);
   --chart-2: oklch(0.7 0.14 195);
   --chart-3: oklch(0.86 0.19 165);
-  --chart-4: oklch(0.65 0.13 220);
-  --chart-5: oklch(0.8 0.15 130);
+  --chart-4: oklch(0.7 0.15 268);
+  --chart-5: oklch(0.85 0.16 120);
   --sidebar: oklch(0.19 0.02 166);
   --sidebar-foreground: oklch(0.96 0.008 160);
   --sidebar-primary: oklch(0.75 0.19 158);
@@ -107,6 +107,9 @@
     color-mix(in oklab, var(--surface-2) 80%, transparent),
     color-mix(in oklab, var(--background) 92%, transparent)
   );
+  --gradient-aurora: radial-gradient(60% 60% at 15% 0%, color-mix(in oklab, var(--accent) 30%, transparent) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 5%, color-mix(in oklab, oklch(0.7 0.15 268) 26%, transparent) 0%, transparent 62%),
+    radial-gradient(80% 70% at 50% 100%, color-mix(in oklab, var(--primary) 20%, transparent) 0%, transparent 68%);
   --shadow-glow: 0 0 60px -12px color-mix(in oklab, var(--primary) 55%, transparent);
   --shadow-elegant: 0 24px 60px -24px oklch(0 0 0 / 70%);
   --transition-smooth: 400ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -193,4 +196,62 @@
     border-color: color-mix(in oklab, var(--primary) 45%, transparent);
     box-shadow: var(--shadow-glow);
   }
+}
+
+@utility aurora {
+  background-image: var(--gradient-aurora);
+}
+
+@utility hairline {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--primary) 55%, transparent),
+      transparent
+    );
+  }
+}
+
+@utility panel {
+  border-radius: var(--radius-xl);
+  background: var(--gradient-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-elegant);
+  transition:
+    border-color var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    transform var(--transition-smooth);
+  &:hover {
+    border-color: color-mix(in oklab, var(--primary) 32%, transparent);
+  }
+}
+
+@utility ring-soft {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 22%, transparent),
+    0 18px 44px -26px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+
+@keyframes sheen {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@utility sheen-text {
+  background: linear-gradient(
+    100deg,
+    var(--color-foreground) 20%,
+    color-mix(in oklab, var(--primary) 90%, white) 45%,
+    var(--color-foreground) 70%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 6s linear infinite;
 }
