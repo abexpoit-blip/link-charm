@@ -20,16 +20,16 @@ import { QUOTA, dailyCap, useBoost } from "@/lib/boost";
 export const Route = createFileRoute("/traffic")({
   head: () => ({
     meta: [
-      { title: "Free Traffic System — 5% & 10% Boost | Snip" },
+      { title: "Free Traffic System — Steady & Launch Modes | Snip" },
       {
         name: "description",
         content:
-          "Snip is 100% free. Route our traffic to your short links at 5% or 10% boost with a 500,000 click weekly quota and full click intelligence.",
+          "Snip is free. Route our network traffic into your short links in Steady or Launch mode with a 500,000 click weekly quota and full click intelligence.",
       },
-      { property: "og:title", content: "Free Traffic System — 5% & 10% Boost | Snip" },
+      { property: "og:title", content: "Free Traffic System — Steady & Launch Modes | Snip" },
       {
         property: "og:description",
-        content: "Two free boost modes, 500,000 clicks weekly quota, zero payment ever.",
+        content: "Two free routing modes, 500,000 clicks weekly quota, zero payment ever.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,18 +41,18 @@ export const Route = createFileRoute("/traffic")({
 const modes = [
   {
     id: "5" as const,
-    rate: "5%",
-    title: "Steady boost",
+    rate: "Steady",
+    title: "Everyday routing",
     icon: Radar,
-    desc: "5% of our network traffic is routed into your links — slow, natural, human-shaped curve.",
+    desc: "Our network traffic drips into your links slowly — a natural, human-shaped curve.",
     perks: ["~25,000 clicks / day", "Natural drip pacing", "Bot filtered sources", "Geo mix: 180+"],
   },
   {
     id: "10" as const,
-    rate: "10%",
-    title: "Launch boost",
+    rate: "Launch",
+    title: "Launch day routing",
     icon: Rocket,
-    desc: "10% routing for launches — double the flow while staying inside the same weekly quota.",
+    desc: "Launch pacing — double the flow while staying inside the same weekly quota.",
     perks: ["~50,000 clicks / day", "Burst pacing", "Referrer variety", "Priority edge lanes"],
   },
 ];
@@ -82,7 +82,7 @@ function TrafficPage() {
           Our traffic system, <span className="text-gradient">given away free</span>
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Pick a routing rate, point it at a short link, and we send real network traffic. Every
+          Pick a routing mode, point it at a short link, and we send real network traffic. Every
           account shares the same weekly quota — 500,000 clicks, reset every Monday.
         </p>
 
@@ -94,7 +94,7 @@ function TrafficPage() {
                 key={m.id}
                 onClick={() => {
                   setRate(m.id);
-                  toast.success(`${m.title} selected`, { description: `${m.rate} routing saved` });
+                  toast.success(`${m.title} selected`, { description: `${m.rate} mode saved` });
                 }}
                 className={`surface-glass lift rounded-2xl p-6 text-left ${on ? "ring-soft border-primary/50" : ""}`}
               >
@@ -102,7 +102,7 @@ function TrafficPage() {
                   <span className="icon-tile size-10">
                     <m.icon className="size-5" />
                   </span>
-                  <span className="text-gradient font-display text-3xl font-bold">{m.rate}</span>
+                  <span className="text-gradient font-display text-xl font-bold">{m.rate}</span>
                 </div>
                 <h2 className="mt-5 text-lg font-semibold">{m.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{m.desc}</p>
@@ -116,7 +116,7 @@ function TrafficPage() {
                 <span
                   className={`mt-6 inline-flex items-center gap-2 text-xs font-medium ${on ? "text-primary" : "text-muted-foreground"}`}
                 >
-                  {on ? "Selected" : "Select this rate"} <ArrowRight className="size-3.5" />
+                  {on ? "Selected" : "Select this mode"} <ArrowRight className="size-3.5" />
                 </span>
               </button>
             );
@@ -131,7 +131,7 @@ function TrafficPage() {
 
             <div className="mt-6">
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Projected at {rate}%</span>
+                <span>Projected · {rate === "5" ? "Steady" : "Launch"}</span>
                 <span>{usedPct}%</span>
               </div>
               <Progress value={usedPct} className="mt-2 h-1.5" />

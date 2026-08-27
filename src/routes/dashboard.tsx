@@ -40,7 +40,7 @@ export const Route = createFileRoute("/dashboard")({
       {
         name: "description",
         content:
-          "A dense, single-screen console: weekly quota, 5% or 10% traffic routing, live click trend, visitor sources and top links.",
+          "A dense, single-screen console: weekly quota, traffic routing modes, live click trend, visitor sources and top links.",
       },
       { property: "og:title", content: "Traffic Console — Clicks, Users & Quota | Snip" },
       {
@@ -239,6 +239,7 @@ function Dashboard() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={hours}>
                     <Bar
+                      isAnimationActive={false}
                       dataKey="v"
                       fill={active ? "var(--color-chart-1)" : "var(--color-muted-foreground)"}
                       radius={2}
@@ -261,22 +262,25 @@ function Dashboard() {
             <div className="min-w-0 bg-background/40 p-5 sm:p-6">
               <p className="text-xs text-muted-foreground">Our traffic routing</p>
               <div className="mt-3 flex gap-2">
-                {(["5", "10"] as const).map((r) => (
+                {([
+                  { id: "5" as const, label: "Steady", Icon: Radar },
+                  { id: "10" as const, label: "Launch", Icon: Rocket },
+                ]).map((m) => (
                   <button
-                    key={r}
+                    key={m.id}
                     onClick={() => {
-                      setRate(r);
-                      toast.success(`Routing set to ${r}%`, {
-                        description: `Daily cap ${nf(dailyCap(r))} clicks`,
+                      setRate(m.id);
+                      toast.success(`${m.label} mode enabled`, {
+                        description: `Daily cap ${nf(dailyCap(m.id))} clicks`,
                       });
                     }}
                     className={`flex flex-1 items-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${
-                      rate === r
+                      rate === m.id
                         ? "border-primary/60 bg-primary/12 text-primary"
                         : "border-border text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {r === "5" ? <Radar className="size-4" /> : <Rocket className="size-4" />} {r}%
+                    <m.Icon className="size-4" /> {m.label}
                   </button>
                 ))}
               </div>
@@ -314,7 +318,7 @@ function Dashboard() {
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-semibold">Clicks vs unique users</h2>
                 <p className="text-xs text-muted-foreground">
-                  {range} · {rate}% routing
+                  {range} · {rate === "5" ? "Steady" : "Launch"} mode
                 </p>
               </div>
               <div className="mt-4 h-64 w-full sm:h-[26rem]">
@@ -346,6 +350,7 @@ function Dashboard() {
                       }}
                     />
                     <Area
+                      isAnimationActive={false}
                       type="monotone"
                       dataKey="clicks"
                       stroke="var(--color-chart-1)"
@@ -353,6 +358,7 @@ function Dashboard() {
                       fill="url(#c1)"
                     />
                     <Area
+                      isAnimationActive={false}
                       type="monotone"
                       dataKey="unique"
                       stroke="var(--color-chart-2)"

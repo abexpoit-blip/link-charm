@@ -39,9 +39,10 @@ export const Route = createFileRoute("/")({
 
 const highlights = [
   { icon: Gauge, title: "500,000 clicks / week", body: "Shared free quota, resets every Monday." },
-  { icon: Radar, title: "5% traffic routing", body: "Steady, human-paced drip into your links." },
-  { icon: Rocket, title: "10% traffic routing", body: "Launch mode burst without extra cost." },
+  { icon: Radar, title: "Steady mode", body: "Human-paced drip of real traffic into your links." },
+  { icon: Rocket, title: "Launch mode", body: "Burst pacing for launch days — still free." },
 ];
+
 
 
 const features = [
@@ -98,8 +99,9 @@ function Home() {
 
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
               Snip turns every long URL into a branded, trackable asset — then pushes our own
-              network traffic into it at 5% or 10%, free, up to 500,000 clicks a week.
+              network traffic into it, free, up to 500,000 clicks a week.
             </p>
+
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button size="xl" variant="hero" asChild>
@@ -124,25 +126,25 @@ function Home() {
           </div>
 
 
-          <div className="relative">
+          <div className="surface-glass glow-ring overflow-hidden rounded-3xl p-2">
             <img
               src={heroImage}
               alt="Glowing chain links dissolving into analytics data streams"
               width={1280}
               height={1024}
-              className="w-full rounded-3xl border border-border object-cover opacity-90"
+              className="h-44 w-full rounded-2xl object-cover sm:h-56 lg:h-64"
             />
 
-            <div className="surface-glass glow-ring absolute -bottom-16 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
+            <div className="p-3 sm:p-5">
               <LinkCreator compact />
             </div>
-
           </div>
+
         </div>
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-6xl px-5 pt-32 pb-24">
+      <section className="mx-auto max-w-6xl px-5 pt-12 pb-24">
         <h2 className="max-w-xl text-3xl font-bold sm:text-4xl">
           Everything a link needs after the click
         </h2>
@@ -170,7 +172,7 @@ function Home() {
           <div className="relative">
             <h2 className="text-3xl font-bold sm:text-4xl">Start snipping in under a minute</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              Unlimited links, 5% or 10% traffic routing, 500,000 clicks weekly — all free.
+              Unlimited links, steady or launch traffic routing, 500,000 clicks weekly — all free.
             </p>
             <div className="mt-8 flex justify-center">
               <Button size="xl" variant="hero" asChild>
