@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Send,
   ShieldCheck,
+  Search,
   Timer,
   Zap,
 } from "lucide-react";
@@ -89,7 +90,13 @@ const faqs = [
 
 function Support() {
   const [open, setOpen] = useState<number | null>(0);
+  const [q, setQ] = useState("");
   const [form, setForm] = useState({ email: "", topic: "", message: "" });
+
+  const needle = q.trim().toLowerCase();
+  const visibleFaqs = needle
+    ? faqs.filter((f) => f.q.toLowerCase().includes(needle) || f.a.toLowerCase().includes(needle))
+    : faqs;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +111,7 @@ function Support() {
   return (
     <div className="relative">
       <div className="hero-aura pointer-events-none absolute inset-x-0 top-0 h-80" />
+      <div className="aurora pointer-events-none absolute inset-x-0 top-0 h-[480px] opacity-60" />
 
       <div className="relative mx-auto max-w-6xl px-5 py-16">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
@@ -120,7 +128,7 @@ function Support() {
         <div className="mt-8 grid gap-3 sm:grid-cols-3">
           {stats.map((s) => (
             <div key={s.label} className="surface-glass flex items-center gap-3 rounded-xl p-4">
-              <span className="flex size-9 items-center justify-center rounded-lg bg-primary/12 text-primary">
+              <span className="icon-tile size-9">
                 <s.icon className="size-4" />
               </span>
               <div>
@@ -134,7 +142,7 @@ function Support() {
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           {channels.map((c) => (
             <article key={c.title} className="surface-glass lift rounded-2xl p-6">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+              <span className="icon-tile size-10">
                 <c.icon className="size-5" />
               </span>
               <h2 className="mt-5 text-lg font-semibold">{c.title}</h2>
@@ -151,9 +159,21 @@ function Support() {
 
         <div className="mt-4 grid items-start gap-3 lg:grid-cols-[1.1fr_1fr]">
           <section className="surface-glass rounded-2xl p-6">
-            <h2 className="text-sm font-semibold">Frequent questions</h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-sm font-semibold">Frequent questions</h2>
+              <div className="relative ml-auto">
+                <Search className="absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Search answers…"
+                  aria-label="Search answers"
+                  className="h-8 w-44 bg-background/60 pl-8 text-xs"
+                />
+              </div>
+            </div>
             <ul className="mt-4 divide-y divide-border">
-              {faqs.map((f, i) => (
+              {visibleFaqs.map((f, i) => (
                 <li key={f.q}>
                   <button
                     onClick={() => setOpen(open === i ? null : i)}
@@ -172,10 +192,15 @@ function Support() {
                   )}
                 </li>
               ))}
+              {visibleFaqs.length === 0 && (
+                <li className="py-6 text-center text-xs text-muted-foreground">
+                  Nothing matches “{q}” — open a ticket and we will answer it.
+                </li>
+              )}
             </ul>
           </section>
 
-          <form onSubmit={submit} className="surface-glass glow-ring rounded-2xl p-6">
+          <form onSubmit={submit} className="surface-glass ring-soft rounded-2xl p-6">
             <h2 className="text-sm font-semibold">Open a ticket</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               Replies land in your inbox and in the console.

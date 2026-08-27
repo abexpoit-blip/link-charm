@@ -1,8 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Check, Gauge, Infinity as InfinityIcon, Radar, Rocket } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Gauge,
+  Infinity as InfinityIcon,
+  Pause,
+  Play,
+  Radar,
+  Rocket,
+  Sparkles,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
+import { QUOTA, dailyCap, useBoost } from "@/lib/boost";
 
 export const Route = createFileRoute("/traffic")({
   head: () => ({
@@ -27,7 +40,7 @@ export const Route = createFileRoute("/traffic")({
 
 const modes = [
   {
-    id: "5",
+    id: "5" as const,
     rate: "5%",
     title: "Steady boost",
     icon: Radar,
@@ -35,7 +48,7 @@ const modes = [
     perks: ["~25,000 clicks / day", "Natural drip pacing", "Bot filtered sources", "Geo mix: 180+"],
   },
   {
-    id: "10",
+    id: "10" as const,
     rate: "10%",
     title: "Launch boost",
     icon: Rocket,
@@ -44,14 +57,22 @@ const modes = [
   },
 ];
 
+const nf = (n: number) => n.toLocaleString();
+
 function TrafficPage() {
-  const [active, setActive] = useState("10");
-  const used = active === "10" ? 348000 : 172000;
-  const quota = 500000;
+  const { rate, setRate, active, setActive } = useBoost();
+  const [links, setLinks] = useState(4);
+  const [days, setDays] = useState(5);
+
+  const perDay = dailyCap(rate);
+  const projected = Math.min(QUOTA, perDay * days * (active ? 1 : 0.35));
+  const perLink = Math.round(projected / Math.max(1, links));
+  const usedPct = Math.round((projected / QUOTA) * 100);
 
   return (
     <div className="relative">
       <div className="hero-aura pointer-events-none absolute inset-x-0 top-0 h-96" />
+      <div className="aurora pointer-events-none absolute inset-x-0 top-0 h-[520px] opacity-60" />
 
       <section className="relative mx-auto max-w-6xl px-5 py-16">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
@@ -67,18 +88,21 @@ function TrafficPage() {
 
         <div className="mt-10 grid gap-4 lg:grid-cols-[1fr_1fr_0.9fr]">
           {modes.map((m) => {
-            const on = active === m.id;
+            const on = rate === m.id;
             return (
               <button
                 key={m.id}
-                onClick={() => setActive(m.id)}
-                className={`surface-glass lift rounded-2xl p-6 text-left ${on ? "glow-ring border-primary/50" : ""}`}
+                onClick={() => {
+                  setRate(m.id);
+                  toast.success(`${m.title} selected`, { description: `${m.rate} routing saved` });
+                }}
+                className={`surface-glass lift rounded-2xl p-6 text-left ${on ? "ring-soft border-primary/50" : ""}`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                  <span className="icon-tile size-10">
                     <m.icon className="size-5" />
                   </span>
-                  <span className="font-display text-3xl font-bold text-gradient">{m.rate}</span>
+                  <span className="text-gradient font-display text-3xl font-bold">{m.rate}</span>
                 </div>
                 <h2 className="mt-5 text-lg font-semibold">{m.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{m.desc}</p>
@@ -102,17 +126,17 @@ function TrafficPage() {
             <div className="flex items-center gap-2 text-sm font-medium">
               <Gauge className="size-4 text-primary" /> Weekly quota
             </div>
-            <p className="mt-5 font-display text-4xl font-bold">500,000</p>
+            <p className="mt-5 font-display text-4xl font-bold">{nf(QUOTA)}</p>
             <p className="mt-1 text-xs text-muted-foreground">clicks per week · resets Monday</p>
 
             <div className="mt-6">
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Used at {active}%</span>
-                <span>{Math.round((used / quota) * 100)}%</span>
+                <span>Projected at {rate}%</span>
+                <span>{usedPct}%</span>
               </div>
-              <Progress value={(used / quota) * 100} className="mt-2 h-1.5" />
+              <Progress value={usedPct} className="mt-2 h-1.5" />
               <p className="mt-2 text-xs text-muted-foreground">
-                {used.toLocaleString()} / {quota.toLocaleString()}
+                {nf(Math.round(projected))} / {nf(QUOTA)}
               </p>
             </div>
 
@@ -120,7 +144,7 @@ function TrafficPage() {
               {[
                 ["Price", "৳0 · always"],
                 ["Links", "Unlimited"],
-                ["Daily cap", active === "10" ? "50,000" : "25,000"],
+                ["Daily cap", nf(perDay)],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-t border-border pt-3">
                   <dt className="text-muted-foreground">{k}</dt>
@@ -135,6 +159,87 @@ function TrafficPage() {
               </Link>
             </Button>
           </aside>
+        </div>
+
+        {/* Interactive planner */}
+        <div className="surface-glass mt-4 grid gap-6 rounded-3xl p-6 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <h2 className="flex items-center gap-2 text-sm font-semibold">
+              <span className="icon-tile size-7">
+                <Sparkles className="size-3.5" />
+              </span>
+              Campaign planner
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Move the sliders to see how the free quota spreads across your links this week.
+            </p>
+
+            <div className="mt-6 space-y-6">
+              <div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">Active links</span>
+                  <span className="font-mono text-primary">{links}</span>
+                </div>
+                <Slider
+                  value={[links]}
+                  min={1}
+                  max={20}
+                  step={1}
+                  onValueChange={(v) => setLinks(v[0] ?? 1)}
+                  className="mt-3"
+                  aria-label="Active links"
+                />
+              </div>
+              <div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">Routing days this week</span>
+                  <span className="font-mono text-primary">{days}</span>
+                </div>
+                <Slider
+                  value={[days]}
+                  min={1}
+                  max={7}
+                  step={1}
+                  onValueChange={(v) => setDays(v[0] ?? 1)}
+                  className="mt-3"
+                  aria-label="Routing days"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setActive(!active);
+                toast[active ? "message" : "success"](
+                  active ? "Routing paused" : "Routing activated",
+                );
+              }}
+              className={`mt-6 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+                active
+                  ? "border-primary/50 bg-primary/12 text-primary"
+                  : "border-border text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {active ? <Pause className="size-4" /> : <Play className="size-4" />}
+              {active ? "Routing is live" : "Routing paused"}
+            </button>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            {[
+              ["Projected clicks", nf(Math.round(projected))],
+              ["Per link", nf(perLink)],
+              ["Quota left", nf(Math.max(0, QUOTA - Math.round(projected)))],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-border bg-background/50 px-5 py-4"
+              >
+                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="mt-1 font-display text-2xl font-bold">{value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
