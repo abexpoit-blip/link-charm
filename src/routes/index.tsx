@@ -149,35 +149,10 @@ function Home() {
               className="w-full rounded-3xl border border-border object-cover opacity-90"
             />
 
-            <div className="surface-glass glow-ring absolute -bottom-10 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Link2 className="size-4 text-primary" />
-                Shorten your link
-              </div>
-              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                <Input
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="Paste your long URL here…"
-                  className="h-11 flex-1 border-border bg-background/60"
-                />
-                <Button variant="hero" className="h-11 px-6" onClick={handleShorten}>
-                  Shorten <ArrowRight className="size-4" />
-                </Button>
-              </div>
-              <div className="mt-3 flex items-center justify-between rounded-xl border border-border bg-background/50 px-4 py-3">
-                <code className="font-mono text-sm text-primary">{short}</code>
-                <button
-                  onClick={() => {
-                    navigator.clipboard?.writeText(`https://${short}`);
-                    toast.success("Copied to clipboard");
-                  }}
-                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  <Copy className="size-3.5" /> Copy
-                </button>
-              </div>
+            <div className="surface-glass glow-ring absolute -bottom-16 left-1/2 w-[92%] -translate-x-1/2 rounded-2xl p-5">
+              <LinkCreator compact />
             </div>
+
           </div>
         </div>
       </section>
